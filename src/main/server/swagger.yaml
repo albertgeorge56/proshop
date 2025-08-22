@@ -1,0 +1,259 @@
+openapi: 3.0.0
+info:
+  title: Test Project API
+  version: 1.0.0
+  description: API documentation For Test Project.
+servers:
+  - url: http://localhost:3000/api
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: jwt
+
+security:
+  - cookieAuth: []
+
+paths:
+  /auth/register:
+    post:
+      summary: Register
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required: [name, email, password]
+      responses:
+        "200":
+          description: Successful registration
+
+  /auth/login:
+    post:
+      summary: Login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required: [email, password]
+      responses:
+        "200":
+          description: Successful login
+
+  /auth/logout:
+    post:
+      summary: Logout
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required: [email, password]
+      responses:
+        "200":
+          description: Successful logout
+
+  /company:
+    post:
+      summary: Add Company
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                shortname:
+                  type: string
+                active:
+                  type: boolean
+              required: [name, shortname, active]
+      responses:
+        "200":
+          description: Company created
+    get:
+      summary: Get All Companies
+      responses:
+        "200":
+          description: List of companies
+
+  /company/{id}:
+    get:
+      summary: Get Company By Id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Company details
+    put:
+      summary: Update Company
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                shortname:
+                  type: string
+                active:
+                  type: boolean
+      responses:
+        "200":
+          description: Company updated
+    delete:
+      summary: Delete Company
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Company deleted
+
+  /group:
+    post:
+      summary: Add Group
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                active:
+                  type: boolean
+              required: [name, active]
+      responses:
+        "200":
+          description: Group created
+    get:
+      summary: Get All Groups
+      responses:
+        "200":
+          description: List of groups
+
+  /group/{id}:
+    get:
+      summary: Get Group By Id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Group details
+    put:
+      summary: Update Group
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        "200":
+          description: Group updated
+    delete:
+      summary: Delete Group
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Group deleted
+
+  /product:
+    post:
+      summary: Add Product
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+                purchaseRate:
+                  type: number
+                saleRate:
+                  type: number
+                mrp:
+                  type: number
+                spRate:
+                  type: number
+                company:
+                  type: string
+                group:
+                  type: string
+              required:
+                [name, purchaseRate, saleRate, mrp, spRate, company, group]
+      responses:
+        "200":
+          description: Product created
+    get:
+      summary: Get All Products
+      responses:
+        "200":
+          description: List of products
