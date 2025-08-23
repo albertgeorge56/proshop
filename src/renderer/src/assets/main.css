@@ -6,7 +6,7 @@
   --breakpoint-lg: '1200px';
   --breakpoint-xl: '1408px';
   /* theme colors */
-  --color-brand-50: var(--mantine-color-primary-0);
+  --color-primary-50: var(--mantine-color-primary-0);
   --color-primary-100: var(--mantine-color-primary-1);
   --color-primary-200: var(--mantine-color-primary-2);
   --color-primary-300: var(--mantine-color-primary-3);
@@ -19,5 +19,28 @@
 }
 
 .draggable {
-   app-region: drag;
+  -webkit-app-region: drag;
+}
+
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #e6e6e6;
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #3b82f6;
+  border-radius: 999px;
+  transition: background 0.2s;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #2563eb;
 }

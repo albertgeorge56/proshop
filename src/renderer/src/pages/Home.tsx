@@ -1,10 +1,9 @@
-import { Button } from '@mantine/core'
+import { Link } from 'react-router'
 
-const Home = () => {
+export default function Home() {
   return (
     <div className="h-full w-full justify-center items-center flex">
-      <Button variant="filled">Button</Button>
+      <Link to="Login">Login page</Link>
     </div>
   )
 }
-export default Home

@@ -1,6 +1,12 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 const api = {
+  minimize: () => ipcRenderer.send('window:minimize'),
+  toggleMax: () => ipcRenderer.send('window:toggleMax'),
+  onMaximized: (cb: (event: any, value: boolean) => void) => {
+    ipcRenderer.on('window:isMaximized', cb)
+  },
+  close: () => ipcRenderer.send('window:close'),
   getBaseUrl: () => ipcRenderer.invoke('get-base-url')
 }
 
