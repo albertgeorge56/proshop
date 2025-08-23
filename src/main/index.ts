@@ -10,6 +10,12 @@ async function createWindow(): Promise<void> {
     height: 670,
     show: false,
     autoHideMenuBar: true,
+    titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: '#e2e8f0',
+      symbolColor: '#74b1be',
+      height: 36
+    },
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
