@@ -1,4 +1,4 @@
-import { Button, NavLink } from '@mantine/core'
+import { NavLink } from '@mantine/core'
 import { IconHome2 } from '@tabler/icons-react'
 import { Link } from 'react-router'
 

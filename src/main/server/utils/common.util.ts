@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { JWTSECRET, MONGOURI } from '../config/constant.config'
+import { JWTSECRET } from '../config/constant.config'
 
 export const generateToken = (payload: object) => {
   return jwt.sign(payload, JWTSECRET, { expiresIn: '7d' })

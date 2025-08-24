@@ -1,4 +1,3 @@
-import { Link } from 'react-router'
 import WindowButton from './WindowButton'
 
 const TopBar = () => {

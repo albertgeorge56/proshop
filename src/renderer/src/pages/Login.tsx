@@ -2,9 +2,9 @@ import { Button, TextInput } from '@mantine/core'
 import { z } from 'zod/v4'
 import { zod4Resolver } from 'mantine-form-zod-resolver'
 import { useForm } from '@mantine/form'
-import axios, { AxiosError } from 'axios'
-import { notifications } from '@mantine/notifications'
 import { useNavigate } from 'react-router'
+import apiClient from '@renderer/utils/api-client'
+import { showToast } from '@renderer/utils/common'
 
 const schema = z.object({
   email: z.email({ error: 'Enter valid Email' }),
@@ -15,40 +15,20 @@ export default function Login() {
   const navigate = useNavigate()
   const form = useForm({
     initialValues: {
-      email: '',
-      password: ''
+      email: 'georgeynr@gmail.com',
+      password: 'abc123'
     },
     validate: zod4Resolver(schema)
   })
 
   const handleSubmit = async (values: typeof form.values) => {
-    const baseUrl = await window.api.getBaseUrl()
-    try {
-      await axios.post(`${baseUrl}/api/auth/login`, values)
-      notifications.show({
-        title: 'Login Successful',
-        message: ''
-      })
-      navigate('/dashboard')
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        notifications.show({
-          color: 'red',
-          styles: {
-            root: { backgroundColor: 'var(--color-red-500)' },
-            title: { color: 'var(--color-red-50)' },
-            closeButton: { color: 'var(--color-red-50)' }
-          },
-          title: error.response?.data,
-          message: ''
-        })
-      }
-    }
+    await apiClient.post('auth/login', values)
+    showToast('Successful', true)
+    navigate('/dashboard')
   }
 
   return (
     <>
-      {/* <TopBar /> */}
       <div className="h-full w-full flex justify-center items-center">
         <form
           className="w-md p-6 rounded-xl bg-primary-100 space-y-3"
