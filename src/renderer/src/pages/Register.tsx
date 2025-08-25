@@ -23,7 +23,7 @@ export default function Register() {
   })
 
   const handleSubmit = (values: typeof form.values) => {
-    apiClient.post('auth/register', values).then(() => navigate('/dashboard'))
+    apiClient.post('auth/register', values).then(() => navigate('/admin', { replace: true }))
   }
 
   return (

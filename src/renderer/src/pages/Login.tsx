@@ -24,7 +24,7 @@ export default function Login() {
   const handleSubmit = async (values: typeof form.values) => {
     await apiClient.post('auth/login', values)
     showToast('Successful', true)
-    navigate('/dashboard')
+    navigate('/admin', { replace: true })
   }
 
   return (
