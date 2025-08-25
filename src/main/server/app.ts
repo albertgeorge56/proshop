@@ -8,16 +8,15 @@ import swaggerRoutes from './routes/swagger.route'
 import errorHandlerMiddleware from './middlewares/error.middleware'
 import notFoundMiddleware from './middlewares/not-found.middleware'
 import cors from 'cors'
-
+import { join } from 'path'
+// import { is } from '@electron-toolkit/utils'
 const app = express()
+const reactPath = join(__dirname, '../../out/renderer')
+app.use(express.static(reactPath))
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
 app.use(express.json())
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }))
-
-app.use('/api/check', (_, res) => {
-  return res.json({ message: 'Hello from server' })
-})
 app.use('/api/auth', authRoutes)
 app.use('/api/company', companyRoutes)
 app.use('/api/group', groupRoutes)

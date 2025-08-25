@@ -1,11 +1,12 @@
 import { app, shell, BrowserWindow, ipcMain, screen } from 'electron'
 import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { startServer } from './server'
 
 let mainWindow: BrowserWindow
 let splashWindow: BrowserWindow
+let baseUrl: string
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: screen.getPrimaryDisplay().workAreaSize.width - 100,
@@ -39,11 +40,12 @@ function createWindow() {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    // mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    mainWindow.loadURL(baseUrl!)
   }
 }
 
-async function createSplash(): Promise<void> {
+function createSplash(): void {
   splashWindow = new BrowserWindow({
     width: 400,
     height: 300,
@@ -70,10 +72,10 @@ app.whenReady().then(async () => {
 
   ipcMain.on('ping', () => console.log('pong'))
 
-  createSplash() //after removing this its fine
+  createSplash()
 
   try {
-    const baseUrl = await startServer()
+    baseUrl = await startServer()
     ipcMain.handle('get-base-url', () => baseUrl)
     createWindow()
     if (mainWindow && !mainWindow.isDestroyed()) {

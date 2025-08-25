@@ -10,6 +10,8 @@ import DashboardLayout from './components/DashboardLayout'
 import Product from './pages/Product'
 import Group from './pages/Group'
 
+console.log(import.meta.env.DEV ? 'Dev Mode' : 'Prod')
+
 export default function App() {
   const navigate = useNavigate()
   useEffect(() => {
