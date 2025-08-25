@@ -1,15 +1,14 @@
-// src/components/CompanyModal.tsx
 import { Button, Checkbox, Group, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { modals } from '@mantine/modals'
 import { z } from 'zod/v4'
 import { zod4Resolver } from 'mantine-form-zod-resolver'
 import apiClient from '@renderer/utils/api-client'
+import { showToast } from '@renderer/utils/common'
 
 interface CompanyModalContentProps {
   company: Company | null
-  index?: number
-  onSubmit: (success: boolean) => void
+  onSuccess: () => void
 }
 
 const companySchema = z.object({
@@ -27,11 +26,7 @@ export const openCompanyModal = (props: CompanyModalContentProps) => {
   })
 }
 
-export default function CompanyModalContent({
-  company,
-  index,
-  onSubmit
-}: CompanyModalContentProps) {
+export default function CompanyModalContent({ company, onSuccess }: CompanyModalContentProps) {
   const form = useForm<Company>({
     initialValues: company ?? { name: '', shortname: '', active: true },
     validate: zod4Resolver(companySchema)
@@ -39,9 +34,9 @@ export default function CompanyModalContent({
   return (
     <form
       onSubmit={form.onSubmit(async (values) => {
-        const res = await apiClient.post('company', values)
-        console.log(res)
-        // modals.closeAll()
+        await apiClient.post('company', values)
+        showToast('Company Added Successfully')
+        onSuccess()
       })}
     >
       <TextInput label="Name" {...form.getInputProps('name')} />

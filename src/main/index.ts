@@ -96,6 +96,10 @@ app.whenReady().then(async () => {
       })
 
       ipcMain.on('window:close', () => app.quit())
+
+      if (process.env.DEBUG_TOOLS === 'true') {
+        mainWindow.webContents.openDevTools({ mode: 'detach' })
+      }
     }
   } catch (error) {
     console.error('SERVER ERROR', error)

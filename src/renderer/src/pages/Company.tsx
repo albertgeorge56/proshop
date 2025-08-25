@@ -1,39 +1,18 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Table, Button, Badge, Pagination, Group, TextInput, Stack } from '@mantine/core'
+import { useMemo, useState } from 'react'
+import { Table, Badge, Pagination, TextInput, ActionIcon } from '@mantine/core'
 import { modals } from '@mantine/modals'
-import { useForm } from '@mantine/form'
-import { z } from 'zod/v4'
-import { zod4Resolver } from 'mantine-form-zod-resolver'
 import { IconSearch, IconEdit, IconTrash, IconPlus } from '@tabler/icons-react'
 import { openCompanyModal } from '@renderer/components/CompanyModalContent'
-
-// ---------------- Schema ----------------
-
-const companySchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  shortname: z.string().min(1, 'Short name is required'),
-  active: z.boolean()
-})
-
-type Company = z.infer<typeof companySchema>
-const mockCompanies: Company[] = [
-  { name: 'OpenAI', shortname: 'OAI', active: true },
-  { name: 'SpaceX', shortname: 'SPX', active: false },
-  { name: 'Tesla', shortname: 'TSLA', active: true },
-  { name: 'Google', shortname: 'GOOGL', active: true },
-  { name: 'Amazon', shortname: 'AMZN', active: false },
-  { name: 'Meta', shortname: 'META', active: true }
-]
+import { ICompany } from '@renderer/utils/types'
+import { useFetch } from '@renderer/hooks/custom-hooks'
+import axios from 'axios'
+import { showToast } from '@renderer/utils/common'
 
 export default function Company() {
-  const [companies, setCompanies] = useState<Company[]>([])
+  const { data: companies } = useFetch<ICompany[]>('company')
   const [search, setSearch] = useState('')
   const [activePage, setActivePage] = useState(1)
   const pageSize = 5
-
-  useEffect(() => {
-    setCompanies(mockCompanies)
-  }, [])
 
   const filteredCompanies = useMemo(() => {
     return companies.filter(
@@ -48,22 +27,22 @@ export default function Company() {
   const pageData = filteredCompanies.slice((activePage - 1) * pageSize, activePage * pageSize)
 
   // ---------------- Handlers ----------------
-
-  const openDeleteModal = (index: number) => {
+  const openDeleteModal = (company: ICompany) => {
     modals.openConfirmModal({
       title: 'Delete company',
       children: 'Are you sure you want to delete this company?',
       labels: { confirm: 'Delete', cancel: 'Cancel' },
       confirmProps: { color: 'red' },
-      onConfirm: () => {
-        setCompanies((prev) => prev.filter((_, i) => i !== index))
+      onConfirm: async () => {
+        await axios.delete('/company', { params: { id: company._id } })
+        showToast('Company Deleted Successfully')
       }
     })
   }
 
   return (
-    <Stack>
-      <Group justify="space-between">
+    <div className="w-full max-w-3xl bg-primary-50 p-8 rounded-xl shadow-lg flex flex-col gap-4">
+      <div className="flex justify-between">
         <TextInput
           placeholder="Search companies..."
           value={search}
@@ -73,27 +52,35 @@ export default function Company() {
           }}
           leftSection={<IconSearch size={16} />}
         />
-        <Button
-          leftSection={<IconPlus size={16} />}
-          onClick={() => openCompanyModal({ company: null, onSubmit: () => {} })}
+        <ActionIcon
+          className="rounded-full!"
+          size={30}
+          onClick={() =>
+            openCompanyModal({
+              company: null,
+              onSuccess: () => {
+                console.log('Added')
+              }
+            })
+          }
         >
-          Add Company
-        </Button>
-      </Group>
-
-      <Table striped highlightOnHover withTableBorder>
+          <IconPlus size={16} />
+        </ActionIcon>
+      </div>
+      <Table highlightOnHover withTableBorder>
         <Table.Thead>
           <Table.Tr>
+            <Table.Th>Sr.</Table.Th>
             <Table.Th>Name</Table.Th>
             <Table.Th>Short name</Table.Th>
             <Table.Th>Status</Table.Th>
             <Table.Th>Actions</Table.Th>
           </Table.Tr>
         </Table.Thead>
-
         <Table.Tbody>
           {pageData.map((c, i) => (
             <Table.Tr key={i}>
+              <Table.Td>{i + 1}.</Table.Td>
               <Table.Td>{c.name}</Table.Td>
               <Table.Td>{c.shortname}</Table.Td>
               <Table.Td>
@@ -102,40 +89,36 @@ export default function Company() {
                 </Badge>
               </Table.Td>
               <Table.Td>
-                <Group gap="xs">
-                  <Button
-                    size="xs"
-                    variant="light"
-                    leftSection={<IconEdit size={14} />}
+                <div className="flex gap-2">
+                  <ActionIcon
+                    variant="filled"
+                    aria-label="Settings"
                     onClick={() =>
                       openCompanyModal({
                         company: c,
-                        index: companies.indexOf(c),
-                        onSubmit: () => {}
+                        onSuccess: () => {}
                       })
                     }
                   >
-                    Edit
-                  </Button>
-                  <Button
-                    size="xs"
+                    <IconEdit size={14} />
+                  </ActionIcon>
+                  <ActionIcon
+                    variant="filled"
                     color="red"
-                    variant="light"
-                    leftSection={<IconTrash size={14} />}
-                    onClick={() => openDeleteModal(companies.indexOf(c))}
+                    aria-label="Settings"
+                    onClick={() => openDeleteModal(c)}
                   >
-                    Delete
-                  </Button>
-                </Group>
+                    <IconTrash size={14} />
+                  </ActionIcon>
+                </div>
               </Table.Td>
             </Table.Tr>
           ))}
         </Table.Tbody>
       </Table>
-
       {totalPages > 1 && (
         <Pagination total={totalPages} value={activePage} onChange={setActivePage} mt="md" />
       )}
-    </Stack>
+    </div>
   )
 }
