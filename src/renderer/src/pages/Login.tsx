@@ -22,7 +22,8 @@ export default function Login() {
   })
 
   const handleSubmit = async (values: typeof form.values) => {
-    await apiClient.post('auth/login', values)
+    const res = await apiClient.post('auth/login', values)
+    if (res.data.token) localStorage.setItem('token', res.data.token)
     showToast('Successful', true)
     navigate('/admin', { replace: true })
   }

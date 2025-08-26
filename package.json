@@ -43,6 +43,7 @@
     "mongoose": "^8.18.0",
     "multer": "^2.0.2",
     "portfinder": "^1.0.37",
+    "qrcode.react": "^4.2.0",
     "react-router": "^7.8.2",
     "swagger-ui-express": "^5.0.1",
     "tailwindcss": "^4.1.12",

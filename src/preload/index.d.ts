@@ -10,7 +10,8 @@ declare global {
       toggleMax: () => void
       close: () => void
       onMaximized: (cb: (event: any, value: boolean) => void) => void
-      getBaseUrl: () => Promise<string>
+      // getPort: () => Promise<number>
+      // getLocalIP: () => string
     }
   }
 }

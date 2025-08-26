@@ -7,16 +7,17 @@ import productRoutes from './routes/product.route'
 import swaggerRoutes from './routes/swagger.route'
 import errorHandlerMiddleware from './middlewares/error.middleware'
 import notFoundMiddleware from './middlewares/not-found.middleware'
-import cors from 'cors'
-import { join } from 'path'
-// import { is } from '@electron-toolkit/utils'
+import { getLocalAdd } from './utils/common.util'
+
 const app = express()
-const reactPath = join(__dirname, '../../out/renderer')
-app.use(express.static(reactPath))
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
+const localAdd = getLocalAdd()
 app.use(express.json())
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }))
+
+app.use('/api/local-ip', (_req, res) => {
+  res.send(localAdd)
+})
 app.use('/api/auth', authRoutes)
 app.use('/api/company', companyRoutes)
 app.use('/api/group', groupRoutes)

@@ -2,13 +2,26 @@ import { notifications } from '@mantine/notifications'
 import axios from 'axios'
 import { showToast } from './common'
 
-export const baseUrl = await window.api.getBaseUrl()
-
+export const port = 3000
+export const baseUrl = `http://localhost:${port}`
 const apiClient = axios.create({
   baseURL: `${baseUrl}/api/`,
   withCredentials: true,
   timeout: 10000
 })
+
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`
+    }
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
 
 apiClient.interceptors.response.use(
   (response) => response,

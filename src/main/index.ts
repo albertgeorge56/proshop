@@ -6,7 +6,7 @@ import { startServer } from './server'
 
 let mainWindow: BrowserWindow
 let splashWindow: BrowserWindow
-let baseUrl: string
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: screen.getPrimaryDisplay().workAreaSize.width - 100,
@@ -40,8 +40,33 @@ function createWindow() {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
-    // mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
-    mainWindow.loadURL(baseUrl!)
+    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+  }
+
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    ipcMain.on('window:minimize', () => mainWindow.minimize())
+    ipcMain.on('window:toggleMax', () => {
+      if (mainWindow.isMaximized()) {
+        mainWindow.unmaximize()
+      } else {
+        mainWindow.maximize()
+      }
+    })
+
+    mainWindow.on('maximize', () => {
+      mainWindow.webContents.send('window:isMaximized', true)
+    })
+
+    mainWindow.on('unmaximize', () => {
+      console.log('unmaximized')
+      mainWindow.webContents.send('window:isMaximized', false)
+    })
+
+    ipcMain.on('window:close', () => app.quit())
+
+    if (process.env.DEBUG_TOOLS === 'true') {
+      mainWindow.webContents.openDevTools({ mode: 'detach' })
+    }
   }
 }
 
@@ -69,45 +94,15 @@ app.whenReady().then(async () => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
-
   ipcMain.on('ping', () => console.log('pong'))
-
   createSplash()
-
   try {
-    baseUrl = await startServer()
-    ipcMain.handle('get-base-url', () => baseUrl)
+    await startServer()
     createWindow()
-    if (mainWindow && !mainWindow.isDestroyed()) {
-      ipcMain.on('window:minimize', () => mainWindow.minimize())
-      ipcMain.on('window:toggleMax', () => {
-        if (mainWindow.isMaximized()) {
-          mainWindow.unmaximize()
-        } else {
-          mainWindow.maximize()
-        }
-      })
-
-      mainWindow.on('maximize', () => {
-        mainWindow.webContents.send('window:isMaximized', true)
-      })
-
-      mainWindow.on('unmaximize', () => {
-        console.log('unmaximized')
-        mainWindow.webContents.send('window:isMaximized', false)
-      })
-
-      ipcMain.on('window:close', () => app.quit())
-
-      if (process.env.DEBUG_TOOLS === 'true') {
-        mainWindow.webContents.openDevTools({ mode: 'detach' })
-      }
-    }
   } catch (error) {
     console.error('SERVER ERROR', error)
     app.quit()
   }
-
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })

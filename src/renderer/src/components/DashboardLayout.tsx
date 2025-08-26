@@ -13,6 +13,7 @@ export default function DashboardLayout() {
   const navigate = useNavigate()
   const handleLogout = async () => {
     await apiClient.post('auth/logout')
+    localStorage.removeItem('token')
     showToast('Logout Successful')
     navigate('/login', { replace: true })
   }

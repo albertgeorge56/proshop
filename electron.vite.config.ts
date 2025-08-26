@@ -11,6 +11,9 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()]
   },
   renderer: {
+    server: {
+      host: true
+    },
     build: {
       rollupOptions: {
         input: {

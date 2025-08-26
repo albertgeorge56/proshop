@@ -1,7 +1,6 @@
 import { Navigate, Route, Routes, useNavigate } from 'react-router'
 import Register from './pages/Register'
 import TopBar from './components/TopBar'
-
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import { useEffect } from 'react'
@@ -9,8 +8,6 @@ import Company from './pages/Company'
 import DashboardLayout from './components/DashboardLayout'
 import Product from './pages/Product'
 import Group from './pages/Group'
-
-console.log(import.meta.env.DEV ? 'Dev Mode' : 'Prod')
 
 export default function App() {
   const navigate = useNavigate()
@@ -30,7 +27,7 @@ export default function App() {
   }, [])
   return (
     <div className="h-screen w-full select-none bg-primary-200">
-      <TopBar />
+      {window.api != undefined && <TopBar />}
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
