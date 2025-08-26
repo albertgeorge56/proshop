@@ -5,6 +5,7 @@ import {
   IconBrand4chan,
   IconBrandProducthunt,
   IconLogout,
+  IconSettings,
   IconUsersGroup
 } from '@tabler/icons-react'
 import { Link, Outlet, useNavigate } from 'react-router'
@@ -57,6 +58,15 @@ export default function DashboardLayout() {
             to="/admin/product"
             label="Product"
             leftSection={<IconBrandProducthunt size={16} stroke={1.5} />}
+          />
+          <NavLink
+            classNames={{
+              root: 'hover:bg-primary-500! hover:text-white! transition-all!  rounded-2xl'
+            }}
+            component={Link}
+            to="/admin/setting"
+            label="Setting"
+            leftSection={<IconSettings size={16} stroke={1.5} />}
           />
           <NavLink
             classNames={{

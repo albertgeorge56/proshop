@@ -8,6 +8,7 @@ import Company from './pages/Company'
 import DashboardLayout from './components/DashboardLayout'
 import Product from './pages/Product'
 import Group from './pages/Group'
+import Setting from './pages/Setting'
 
 export default function App() {
   const navigate = useNavigate()
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="company" element={<Company />} />
           <Route path="group" element={<Group />} />
           <Route path="product" element={<Product />} />
+          <Route path="setting" element={<Setting />} />
         </Route>
       </Routes>
     </div>

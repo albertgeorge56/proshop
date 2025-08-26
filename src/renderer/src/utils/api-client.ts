@@ -1,4 +1,3 @@
-import { notifications } from '@mantine/notifications'
 import axios from 'axios'
 import { showToast } from './common'
 
@@ -34,13 +33,9 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error: any) => {
     if (error.response?.data) {
-      notifications.show({
-        color: 'red',
-        message: error.response?.data.message
-      })
+      showToast(error.response?.data.message, false)
       return Promise.reject(error)
     }
-
     showToast('Something Went Wrong', false)
     return Promise.reject(error)
   }

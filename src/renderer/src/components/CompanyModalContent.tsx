@@ -5,9 +5,10 @@ import { z } from 'zod/v4'
 import { zod4Resolver } from 'mantine-form-zod-resolver'
 import apiClient from '@renderer/utils/api-client'
 import { showToast } from '@renderer/utils/common'
+import { ICompany } from '@renderer/utils/types'
 
 interface CompanyModalContentProps {
-  company: Company | null
+  company: ICompany | null
   onSuccess: () => void
 }
 
@@ -34,15 +35,21 @@ export default function CompanyModalContent({ company, onSuccess }: CompanyModal
   return (
     <form
       onSubmit={form.onSubmit(async (values) => {
-        await apiClient.post('company', values)
-        showToast('Company Added Successfully')
+        if (company) {
+          await apiClient.put(`company/${company._id}`, values)
+          showToast('Company Updated Successfully')
+        } else {
+          await apiClient.post('company', values)
+          showToast('Company Added Successfully')
+          form.reset()
+        }
         onSuccess()
+        modals.closeAll()
       })}
     >
       <TextInput label="Name" {...form.getInputProps('name')} />
       <TextInput label="Short name" {...form.getInputProps('shortname')} />
       <Checkbox mt="md" label="Active" {...form.getInputProps('active', { type: 'checkbox' })} />
-
       <Group justify="flex-end" mt="lg">
         <Button type="submit">{company ? 'Save' : 'Add'}</Button>
       </Group>

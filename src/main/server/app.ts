@@ -9,7 +9,7 @@ import errorHandlerMiddleware from './middlewares/error.middleware'
 import notFoundMiddleware from './middlewares/not-found.middleware'
 import { getLocalAdd } from './utils/common.util'
 import cors from 'cors'
-import { join } from 'path'
+import path, { join } from 'path'
 
 const app = express()
 const localAdd = getLocalAdd()
@@ -23,6 +23,8 @@ if (process.env.NODE_ENV === 'production') {
   const reactPath = join(__dirname, '../../out/renderer')
   app.use(express.static(reactPath))
 }
+app.use('/uploads', express.static(path.join('E:/', 'proshop', 'uploads')))
+
 app.use('/api/local-ip', (_req, res) => {
   res.send(localAdd)
 })

@@ -6,8 +6,9 @@ import ApiError from '../utils/custom-error.util'
 // Create Product with image upload
 export const createProduct = async (req: Request, res: Response) => {
   // Multer puts the file info in req.file
+  console.log(req.body)
   const file = req.file as Express.Multer.File | undefined
-  const imagePath = file?.filename ? `/uploads/${file.filename}` : undefined
+  const imagePath = file ? `uploads/${file.filename}` : undefined
   const parsed = productSchema.parse({ ...req.body, imagePath })
   const product = await Product.create(parsed)
   res.status(201).json({ success: true, data: product })
@@ -15,7 +16,11 @@ export const createProduct = async (req: Request, res: Response) => {
 
 // Get All Products
 export const getProducts = async (_req: Request, res: Response) => {
-  const products = await Product.find().populate('company').populate('group').lean()
+  const products = await Product.find()
+    .sort({ createdAt: -1 })
+    .populate('company')
+    .populate('group')
+    .lean()
   res.json({ success: true, data: products })
 }
 

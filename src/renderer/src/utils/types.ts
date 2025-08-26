@@ -1,5 +1,5 @@
 export interface ICompany {
-  _id?: number
+  _id?: string
   name: string
   shortname: string
   active: boolean
@@ -9,7 +9,7 @@ export interface ICompany {
 }
 
 export interface IGroup {
-  _id?: number
+  _id?: string
   name: string
   active: boolean
   createdAt: Date
@@ -17,15 +17,16 @@ export interface IGroup {
   products: IProduct[] | []
 }
 
-interface IProduct {
+export interface IProduct {
+  _id?: string
   name: string
   description?: string
   purchaseRate: number
   saleRate: number
   mrp: number
   spRate?: number
-  company: ICompany | null
-  group: IGroup | null
+  company: ICompany
+  group: IGroup
   imagePath?: string
   createdAt: Date
   updatedAt: Date

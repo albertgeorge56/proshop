@@ -16,7 +16,10 @@ export const createCompany = async (req: Request, res: Response) => {
 
 // Get All Companies
 export const getCompanies = async (_req: Request, res: Response) => {
-  const companies = await Company.find().populate<{ products: IProduct[] }>('products').lean()
+  const companies = await Company.find()
+    .sort({ createdAt: -1 })
+    .populate<{ products: IProduct[] }>('products')
+    .lean()
   res.json({ success: true, data: companies })
 }
 

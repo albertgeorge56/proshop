@@ -5,11 +5,11 @@ import { IconSearch, IconEdit, IconTrash, IconPlus } from '@tabler/icons-react'
 import { openCompanyModal } from '@renderer/components/CompanyModalContent'
 import { ICompany } from '@renderer/utils/types'
 import { useFetch } from '@renderer/hooks/custom-hooks'
-import axios from 'axios'
 import { showToast } from '@renderer/utils/common'
+import apiClient from '@renderer/utils/api-client'
 
 export default function Company() {
-  const { data: companies } = useFetch<ICompany[]>('company')
+  const { data: companies, refetch } = useFetch<ICompany[]>('company')
   const [search, setSearch] = useState('')
   const [activePage, setActivePage] = useState(1)
   const pageSize = 5
@@ -34,14 +34,15 @@ export default function Company() {
       labels: { confirm: 'Delete', cancel: 'Cancel' },
       confirmProps: { color: 'red' },
       onConfirm: async () => {
-        await axios.delete('/company', { params: { id: company._id } })
+        await apiClient.delete(`company/${company._id}`)
         showToast('Company Deleted Successfully')
+        refetch()
       }
     })
   }
 
   return (
-    <div className="w-full max-w-3xl bg-primary-50 p-8 rounded-xl shadow-lg flex flex-col gap-4">
+    <div className="w-full max-w-4xl bg-primary-50 p-8 rounded-xl shadow-lg flex flex-col gap-4">
       <div className="flex justify-between">
         <TextInput
           placeholder="Search companies..."
@@ -58,9 +59,7 @@ export default function Company() {
           onClick={() =>
             openCompanyModal({
               company: null,
-              onSuccess: () => {
-                console.log('Added')
-              }
+              onSuccess: refetch
             })
           }
         >
@@ -96,7 +95,7 @@ export default function Company() {
                     onClick={() =>
                       openCompanyModal({
                         company: c,
-                        onSuccess: () => {}
+                        onSuccess: refetch
                       })
                     }
                   >
