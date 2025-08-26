@@ -25,6 +25,7 @@ export default function App() {
     window.addEventListener('keydown', keyPressHandler)
     return () => window.removeEventListener('keydown', keyPressHandler)
   }, [])
+
   return (
     <div className="h-screen w-full select-none bg-primary-200">
       {window.api != undefined && <TopBar />}

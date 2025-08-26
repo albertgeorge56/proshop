@@ -27,6 +27,15 @@ export default function DashboardLayout() {
               root: 'hover:bg-primary-500! hover:text-white! transition-all! rounded-2xl'
             }}
             component={Link}
+            to="/admin"
+            label="Dashboard"
+            leftSection={<IconBrand4chan size={16} stroke={1.5} />}
+          />
+          <NavLink
+            classNames={{
+              root: 'hover:bg-primary-500! hover:text-white! transition-all! rounded-2xl'
+            }}
+            component={Link}
             to="/admin/company"
             label="Company"
             leftSection={<IconBrand4chan size={16} stroke={1.5} />}

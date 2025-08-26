@@ -14,13 +14,13 @@ export const getLocalAdd = () => {
   {
     const interfaces = os.networkInterfaces()
     for (const name of Object.keys(interfaces)) {
-      for (const net of interfaces[name]!) {
-        if (net.family === 'IPv4' && !net.internal) {
-          console.log(`http://${net.address}:3000`)
-          return `http://${net.address}:3000`
+      if (name == 'Wi-Fi')
+        for (const net of interfaces[name]!) {
+          if (net.family === 'IPv4' && !net.internal) {
+            return `http://${net.address}`
+          }
         }
-      }
     }
-    return 'http://localhost:3000'
+    return 'http://localhost'
   }
 }

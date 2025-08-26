@@ -40,7 +40,8 @@ function createWindow() {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    mainWindow.loadURL('http://localhost:3000')
+    // mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 
   if (mainWindow && !mainWindow.isDestroyed()) {

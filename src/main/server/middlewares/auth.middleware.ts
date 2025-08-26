@@ -4,7 +4,7 @@ import { verifyToken } from '../utils/common.util'
 import User from '../models/user.model'
 
 export const authMiddleware = async (req: Request, _res: Response, next: NextFunction) => {
-  const { token } = req.cookies
+  const token = req.headers.authorization?.split(' ')[1]
   if (!token) throw new ApiError('No token provided')
   const payload = verifyToken<{ id: string }>(token)
   if (!payload) throw new ApiError('Invalid/Expired Token')

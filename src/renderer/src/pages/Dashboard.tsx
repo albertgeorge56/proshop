@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
-import apiClient from '@renderer/utils/api-client'
+import apiClient, { port } from '@renderer/utils/api-client'
 
 export default function Dashboard() {
   const [localAdd, setlocalAdd] = useState<string>()
   useEffect(() => {
     ;(async () => {
       const res = await apiClient.get('local-ip')
-      setlocalAdd(res.data)
+      if (import.meta.env.MODE == 'development') {
+        setlocalAdd(`${res.data}:5173`)
+      } else {
+        setlocalAdd(`${res.data}:${port}`)
+      }
     })()
   }, [])
 

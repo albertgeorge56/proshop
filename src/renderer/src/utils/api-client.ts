@@ -3,10 +3,17 @@ import axios from 'axios'
 import { showToast } from './common'
 
 export const port = 3000
-export const baseUrl = `http://localhost:${port}`
+const origin = window.location.origin
+let url = ''
+if (origin.startsWith('file')) {
+  url = 'http://localhost'
+} else {
+  url = `${window.location.origin.split(':')[0]}:${window.location.origin.split(':')[1]}`
+}
+export const baseUrl = `${url}:${port}`
+
 const apiClient = axios.create({
   baseURL: `${baseUrl}/api/`,
-  withCredentials: true,
   timeout: 10000
 })
 
