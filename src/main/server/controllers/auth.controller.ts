@@ -10,7 +10,7 @@ export const register = async (req: Request, res: Response) => {
     return res.status(400).json({ success: false, message: 'This email is already in use.' })
   const user = await User.create({ name, email, password })
   const token = generateToken({ id: user._id })
-  return res.json({ success: true, token, message: 'User Registered Successfully' })
+  return res.json({ success: true, token, user, message: 'User Registered Successfully' })
 }
 
 export const login = async (req: Request, res: Response) => {
@@ -20,7 +20,7 @@ export const login = async (req: Request, res: Response) => {
   const match = await user.comparePassword(password)
   if (!match) return res.status(400).json('Invalid Credentials')
   const token = generateToken({ id: user._id })
-  return res.json({ success: true, token, message: 'Logged in Successfully' })
+  return res.json({ success: true, token, user, message: 'Logged in Successfully' })
 }
 
 export const logout = (_: Request, res: Response) => {

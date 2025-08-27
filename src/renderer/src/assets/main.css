@@ -1,11 +1,5 @@
 @import 'tailwindcss';
 @theme {
-  --breakpoint-xs: '576px';
-  --breakpoint-sm: '768px';
-  --breakpoint-md: '992px';
-  --breakpoint-lg: '1200px';
-  --breakpoint-xl: '1408px';
-  /* theme colors */
   --color-primary-50: var(--mantine-color-primary-0);
   --color-primary-100: var(--mantine-color-primary-1);
   --color-primary-200: var(--mantine-color-primary-2);
@@ -16,6 +10,17 @@
   --color-primary-700: var(--mantine-color-primary-7);
   --color-primary-800: var(--mantine-color-primary-8);
   --color-primary-900: var(--mantine-color-primary-9);
+}
+
+@media (max-width: 991px) {
+  .sidebar {
+    position: fixed;
+    left: -100%;
+    width: 200px;
+    top: 0;
+    bottom: 0;
+    z-index: 999;
+  }
 }
 
 .draggable {

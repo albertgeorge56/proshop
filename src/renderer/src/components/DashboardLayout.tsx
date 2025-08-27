@@ -1,86 +1,31 @@
-import { NavLink } from '@mantine/core'
-import apiClient from '@renderer/utils/api-client'
-import { showToast } from '@renderer/utils/common'
-import {
-  IconBrand4chan,
-  IconBrandProducthunt,
-  IconLogout,
-  IconSettings,
-  IconUsersGroup
-} from '@tabler/icons-react'
-import { Link, Outlet, useNavigate } from 'react-router'
+import { IconCategory2, IconCategoryFilled } from '@tabler/icons-react'
+import { useState } from 'react'
+import { Outlet } from 'react-router'
+import Sidebar from './Sidebar'
 
 export default function DashboardLayout() {
-  const navigate = useNavigate()
-  const handleLogout = async () => {
-    await apiClient.post('auth/logout')
-    localStorage.removeItem('token')
-    showToast('Logout Successful')
-    navigate('/login', { replace: true })
-  }
+  const [showSidebar, setShowSidebar] = useState(false)
 
   return (
     <>
-      <div className="h-full w-full flex justify-between">
-        <div className="w-1/4 bg-primary-200 px-2 pt-16">
-          <NavLink
-            classNames={{
-              root: 'hover:bg-primary-500! hover:text-white! transition-all! rounded-2xl'
-            }}
-            component={Link}
-            to="/admin"
-            label="Dashboard"
-            leftSection={<IconBrand4chan size={16} stroke={1.5} />}
-          />
-          <NavLink
-            classNames={{
-              root: 'hover:bg-primary-500! hover:text-white! transition-all! rounded-2xl'
-            }}
-            component={Link}
-            to="/admin/company"
-            label="Company"
-            leftSection={<IconBrand4chan size={16} stroke={1.5} />}
-          />
-          <NavLink
-            classNames={{
-              root: 'hover:bg-primary-500! hover:text-white! transition-all!  rounded-2xl'
-            }}
-            component={Link}
-            to="/admin/group"
-            label="Group"
-            leftSection={<IconUsersGroup size={16} stroke={1.5} />}
-          />
-          <NavLink
-            classNames={{
-              root: 'hover:bg-primary-500! hover:text-white! transition-all!  rounded-2xl'
-            }}
-            component={Link}
-            to="/admin/product"
-            label="Product"
-            leftSection={<IconBrandProducthunt size={16} stroke={1.5} />}
-          />
-          <NavLink
-            classNames={{
-              root: 'hover:bg-primary-500! hover:text-white! transition-all!  rounded-2xl'
-            }}
-            component={Link}
-            to="/admin/setting"
-            label="Setting"
-            leftSection={<IconSettings size={16} stroke={1.5} />}
-          />
-          <NavLink
-            classNames={{
-              root: 'hover:bg-primary-500! hover:text-white! transition-all!  rounded-2xl'
-            }}
-            component="button"
-            onClick={() => {
-              handleLogout()
-            }}
-            label="Logout"
-            leftSection={<IconLogout size={16} stroke={1.5} />}
-          />
+      <div className="h-full md:flex justify-between">
+        <div className="fixed top-4 right-4 lg:hidden">
+          {showSidebar ? (
+            <IconCategoryFilled
+              className="text-primary-900! cursor-pointer"
+              size={34}
+              onClick={() => setShowSidebar(false)}
+            />
+          ) : (
+            <IconCategory2
+              className="text-primary-900! cursor-pointer"
+              size={34}
+              onClick={() => setShowSidebar(true)}
+            />
+          )}
         </div>
-        <div className="flex-1 bg-primary-100 flex justify-center items-center">
+        <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
+        <div className="h-full bg-primary-100 flex-1 flex p-2 justify-center items-center">
           <Outlet />
         </div>
       </div>

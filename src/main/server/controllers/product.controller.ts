@@ -33,7 +33,7 @@ export const getProductById = async (req: Request, res: Response) => {
 
 // Update Product (with optional image upload)
 export const updateProduct = async (req: Request, res: Response) => {
-  const imagePath = req.file ? `/uploads/${req.file.filename}` : req.body.imagePath
+  const imagePath = req.file ? `uploads/${req.file.filename}` : req.body.imagePath
   const parsed = productSchema.partial().parse({ ...req.body, imagePath })
   const product = await Product.findByIdAndUpdate(req.params.id, parsed, {
     new: true

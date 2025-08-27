@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
   },
   filename: (_, file, cb) => {
     const fileparse = path.parse(file.originalname)
-    cb(null, fileparse.name + '-' + Date.now() + '-' + fileparse.ext)
+    cb(null, fileparse.name.split(' ').join('-') + '-' + Date.now() + fileparse.ext)
   }
 })
 

@@ -56,7 +56,7 @@ function ViewProductModalContent({ product }: { product: IProduct }) {
         </p>
         <p>
           <span className="font-medium">Group:</span>{' '}
-          {typeof product.group === 'object' ? (product.group as IGroup).name : product.group}
+          {typeof product?.group === 'object' ? (product?.group as IGroup)?.name : product?.group}
         </p>
       </div>
       <div className="space-y-2">

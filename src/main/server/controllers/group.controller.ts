@@ -16,7 +16,10 @@ export const createGroup = async (req: Request, res: Response) => {
 
 // Get All Groups (populate products)
 export const getGroups = async (_req: Request, res: Response) => {
-  const groups = await Group.find().populate<{ products: IProduct[] }>('products').lean()
+  const groups = await Group.find()
+    .sort({ createdAt: -1 })
+    .populate<{ products: IProduct[] }>('products')
+    .lean()
   res.json({ success: true, data: groups })
 }
 

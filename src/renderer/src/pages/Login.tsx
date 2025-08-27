@@ -5,6 +5,7 @@ import { useForm } from '@mantine/form'
 import { useNavigate } from 'react-router'
 import apiClient from '@renderer/utils/api-client'
 import { showToast } from '@renderer/utils/common'
+import { useEffect } from 'react'
 
 const schema = z.object({
   email: z.email({ error: 'Enter valid Email' }),
@@ -21,6 +22,12 @@ export default function Login() {
     validate: zod4Resolver(schema)
   })
 
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      navigate('/admin', { replace: true })
+    }
+  }, [localStorage, navigate])
+
   const handleSubmit = async (values: typeof form.values) => {
     const res = await apiClient.post('auth/login', values)
     if (res.data.token) localStorage.setItem('token', res.data.token)
@@ -30,9 +37,9 @@ export default function Login() {
 
   return (
     <>
-      <div className="h-full w-full flex justify-center items-center">
+      <div className="h-full w-full flex justify-center items-center p-6">
         <form
-          className="w-md p-6 rounded-xl bg-primary-100 space-y-3"
+          className="w-full max-w-md rounded-xl bg-primary-100 p-6 space-y-3"
           onSubmit={form.onSubmit((values) => handleSubmit(values))}
         >
           <div className="text-md font-bold text-center p-2">PROSHOP | LOGIN</div>
