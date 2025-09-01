@@ -52,12 +52,12 @@ export default function Dashboard() {
     if (companies.length > 0 && groups.length > 0) {
       const newCompanyData = companies.map((c) => ({
         name: c.name,
-        products: products.filter((p) => p?.company._id === c._id).length
+        products: products.length
       }))
       setCompanyData(newCompanyData)
       const newgroupData = groups.map((g) => ({
         name: g.name,
-        products: products.filter((p) => p?.group?._id === g._id).length
+        products: products.length
       }))
       setGroupData(newgroupData)
     }

@@ -49,14 +49,10 @@ function ViewProductModalContent({ product }: { product: IProduct }) {
           <span className="font-medium">Description:</span> {product.description || '—'}
         </p>
         <p>
-          <span className="font-medium">Company:</span>{' '}
-          {typeof product.company === 'object'
-            ? (product.company as ICompany).name
-            : product.company}
+          <span className="font-medium">Company:</span> {(product.company as ICompany)?.name}
         </p>
         <p>
-          <span className="font-medium">Group:</span>{' '}
-          {typeof product?.group === 'object' ? (product?.group as IGroup)?.name : product?.group}
+          <span className="font-medium">Group:</span> {(product.company as ICompany)?.name}
         </p>
       </div>
       <div className="space-y-2">

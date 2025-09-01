@@ -18,11 +18,14 @@ app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }))
 
 app.use(cors())
-
-if (process.env.NODE_ENV === 'production') {
+if (true) {
   const reactPath = join(__dirname, '../../out/renderer')
   app.use(express.static(reactPath))
+  app.get('/', (_req, res) => {
+    res.sendFile(path.join(reactPath, 'index.html'))
+  })
 }
+
 app.use('/uploads', express.static(path.join('E:/', 'proshop', 'uploads')))
 
 app.use('/api/local-ip', (_req, res) => {
